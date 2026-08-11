@@ -118,5 +118,3 @@ For privacy questions or deletion requests related to DataVault:
 
 - Instagram: [@DataWithPranav](https://www.instagram.com/) (DataWithPranav)
 - Project / issues: the DataVault GitHub repository associated with this policy
-
-If you need a dedicated email address listed here, add it in App Dashboard contact settings and keep this document in sync.
