@@ -15,6 +15,7 @@ Instagram followers receive folder/file links from this repo via DataVault autom
 |--------|------------------|
 | `excel-series/` | Excel practice datasets |
 | `sql-series/` | SQL practice files |
+| `sql-powerbi-series/` | SQL + Power BI Series (Tmity University) |
 | `powerbi-series/` | Power BI project files |
 | `job-simulation/` | Job simulation resources |
 | `misc/` | One-off resources |
