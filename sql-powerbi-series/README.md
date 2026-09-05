@@ -13,6 +13,7 @@ One row in the CSV = one fee installment (not one student).
 |------|------------|
 | `Tmity_University_Fee_Dump.csv` | Master ERP dump for SQL Server import |
 | `02_everyday_queries.sql` | Everyday analyst queries (SELECT, WHERE, GROUP BY, CASE, …) |
+| `04_normalize.sql` | Split dump into DimCampus, DimProgram, DimStudent, FactFee |
 
 ## Database tip
 
