@@ -1,0 +1,159 @@
+// Power BI Desktop → DAX query view
+// 1) First create empty table All_Measures in Report/Model:
+//    All_Measures = FILTER ( { (1) }, FALSE() )
+// 2) Paste this whole script in DAX query view
+// 3) Click "Update model with changes" (or Apply) so measures are added
+// 4) Hide the dummy column on All_Measures
+
+DEFINE
+	// -------- Fees KPIs --------
+	MEASURE 'All_Measures'[Total Collected] =
+		SUM ( FactFee[Amount_Paid] )
+
+	MEASURE 'All_Measures'[Total Due] =
+		SUM ( FactFee[Amount_Due] )
+
+	MEASURE 'All_Measures'[Outstanding] =
+		'All_Measures'[Total Due] - 'All_Measures'[Total Collected]
+
+	MEASURE 'All_Measures'[Collection %] =
+		DIVIDE ( 'All_Measures'[Total Collected], 'All_Measures'[Total Due] )
+
+	// -------- Counts --------
+	MEASURE 'All_Measures'[Fee Lines] =
+		COUNTROWS ( FactFee )
+
+	MEASURE 'All_Measures'[Students] =
+		DISTINCTCOUNT ( FactFee[Student_ID] )
+
+	MEASURE 'All_Measures'[Campuses] =
+		DISTINCTCOUNT ( FactFee[Campus_ID] )
+
+	MEASURE 'All_Measures'[Programs] =
+		DISTINCTCOUNT ( FactFee[Program_ID] )
+
+	// -------- Fees by Head --------
+	MEASURE 'All_Measures'[Collected Tuition] =
+		CALCULATE ( 'All_Measures'[Total Collected], FactFee[Fee_Head] = "Tuition" )
+
+	MEASURE 'All_Measures'[Collected Hostel] =
+		CALCULATE ( 'All_Measures'[Total Collected], FactFee[Fee_Head] = "Hostel" )
+
+	MEASURE 'All_Measures'[Collected Exam] =
+		CALCULATE ( 'All_Measures'[Total Collected], FactFee[Fee_Head] = "Exam" )
+
+	MEASURE 'All_Measures'[Collected Transport] =
+		CALCULATE ( 'All_Measures'[Total Collected], FactFee[Fee_Head] = "Transport" )
+
+	MEASURE 'All_Measures'[Collected Application] =
+		CALCULATE ( 'All_Measures'[Total Collected], FactFee[Fee_Head] = "Application" )
+
+	// -------- Fees by Campus Type --------
+	MEASURE 'All_Measures'[Collected School] =
+		CALCULATE ( 'All_Measures'[Total Collected], DimCampus[Campus_Type] = "School" )
+
+	MEASURE 'All_Measures'[Collected University] =
+		CALCULATE ( 'All_Measures'[Total Collected], DimCampus[Campus_Type] = "University" )
+
+	MEASURE 'All_Measures'[Collected International] =
+		CALCULATE ( 'All_Measures'[Total Collected], DimCampus[Campus_Type] = "International" )
+
+	MEASURE 'All_Measures'[Due School] =
+		CALCULATE ( 'All_Measures'[Total Due], DimCampus[Campus_Type] = "School" )
+
+	MEASURE 'All_Measures'[Due University] =
+		CALCULATE ( 'All_Measures'[Total Due], DimCampus[Campus_Type] = "University" )
+
+	MEASURE 'All_Measures'[Due International] =
+		CALCULATE ( 'All_Measures'[Total Due], DimCampus[Campus_Type] = "International" )
+
+	// -------- Admissions --------
+	MEASURE 'All_Measures'[Applications] =
+		DISTINCTCOUNT ( FactFee[Application_ID] )
+
+	MEASURE 'All_Measures'[Students Enrolled] =
+		CALCULATE (
+			DISTINCTCOUNT ( FactFee[Student_ID] ),
+			FactFee[Admission_Status] = "Enrolled"
+		)
+
+	MEASURE 'All_Measures'[Students Offered] =
+		CALCULATE (
+			DISTINCTCOUNT ( FactFee[Student_ID] ),
+			FactFee[Admission_Status] = "Offered"
+		)
+
+	MEASURE 'All_Measures'[Students Applied] =
+		CALCULATE (
+			DISTINCTCOUNT ( FactFee[Student_ID] ),
+			FactFee[Admission_Status] = "Applied"
+		)
+
+	MEASURE 'All_Measures'[Students Withdrawn] =
+		CALCULATE (
+			DISTINCTCOUNT ( FactFee[Student_ID] ),
+			FactFee[Admission_Status] = "Withdrawn"
+		)
+
+	MEASURE 'All_Measures'[Enrollment Rate %] =
+		DIVIDE ( 'All_Measures'[Students Enrolled], 'All_Measures'[Applications] )
+
+	MEASURE 'All_Measures'[Avg Entrance Score] =
+		AVERAGE ( FactFee[Entrance_Score] )
+
+	// -------- Journey --------
+	MEASURE 'All_Measures'[Students From Tmity School] =
+		CALCULATE (
+			DISTINCTCOUNT ( DimStudent[Student_ID] ),
+			DimStudent[From_Tmity_School] = "Yes"
+		)
+
+	MEASURE 'All_Measures'[Students Not From Tmity School] =
+		CALCULATE (
+			DISTINCTCOUNT ( DimStudent[Student_ID] ),
+			DimStudent[From_Tmity_School] = "No"
+		)
+
+	MEASURE 'All_Measures'[School Students Now In University] =
+		CALCULATE (
+			DISTINCTCOUNT ( FactFee[Student_ID] ),
+			DimStudent[From_Tmity_School] = "Yes",
+			DimCampus[Campus_Type] = "University"
+		)
+
+	MEASURE 'All_Measures'[School To University Retention %] =
+		DIVIDE (
+			'All_Measures'[School Students Now In University],
+			'All_Measures'[Students From Tmity School]
+		)
+
+	// -------- Placements --------
+	MEASURE 'All_Measures'[Placement Eligible Students] =
+		CALCULATE (
+			DISTINCTCOUNT ( FactFee[Student_ID] ),
+			FactFee[Placement_Eligible] = "Yes"
+		)
+
+	MEASURE 'All_Measures'[Placement Offered Students] =
+		CALCULATE (
+			DISTINCTCOUNT ( FactFee[Student_ID] ),
+			FactFee[Drive_Status] IN { "Offered", "Joined" }
+		)
+
+	MEASURE 'All_Measures'[Placement Joined Students] =
+		CALCULATE (
+			DISTINCTCOUNT ( FactFee[Student_ID] ),
+			FactFee[Drive_Status] = "Joined"
+		)
+
+	MEASURE 'All_Measures'[Avg Package LPA] =
+		AVERAGE ( FactFee[Package_LPA] )
+
+	MEASURE 'All_Measures'[Offer Rate %] =
+		DIVIDE (
+			'All_Measures'[Placement Offered Students],
+			'All_Measures'[Placement Eligible Students]
+		)
+
+EVALUATE
+ROW ( "Status", "Click Update model with changes to save all measures" )
