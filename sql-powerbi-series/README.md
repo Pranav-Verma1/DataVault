@@ -9,13 +9,13 @@ One row in the CSV = one fee installment (not one student).
 
 ## Files
 
-| File | What it is |
-|------|------------|
-| `Tmity_University_Fee_Dump.csv` | Master ERP dump for SQL Server import |
-| `02_everyday_queries.sql` | Everyday analyst queries (SELECT, WHERE, GROUP BY, CASE, …) |
-| `04_normalize.sql` | Split dump into DimCampus, DimProgram, DimStudent, FactFee |
-| `powerbi-all-measures-dax-query-view.dax` | Paste in Power BI DAX query view → Update model (all measures) |
-| `powerbi-all-measures-dax.md` | All_Measures folder list + DAX reference |
+| Part | File | What it is |
+|------|------|------------|
+| Part 1 | `Tmity_University_Fee_Dump.csv` | Master ERP dump for SQL Server import |
+| Part 2 | `02_everyday_queries.sql` | Everyday analyst queries (SELECT, WHERE, GROUP BY, CASE, …) |
+| Part 4 | `04_normalize.sql` | Split dump into DimCampus, DimProgram, DimStudent, FactFee |
+| Part 7 | `powerbi-all-measures-dax-query-view.dax` | Paste in Power BI DAX query view → Update model (all measures) |
+| Part 7 | `powerbi-all-measures-dax.md` | All_Measures folder list + DAX reference |
 
 ## Database tip
 
